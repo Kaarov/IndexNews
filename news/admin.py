@@ -100,6 +100,14 @@ class PartnersAdmin(admin.ModelAdmin):
     search_fields = ['title', ]
 
 
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'active', 'image', 'description', 'created', ]
+    list_display_links = ['title', ]
+    list_per_page = 10
+    search_fields = ['title', ]
+
+
 @admin.register(PhoneNumbers)
 class PhoneNumbersAdmin(admin.ModelAdmin):
     list_display = ['id', 'phonenumber', 'active']

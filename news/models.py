@@ -146,6 +146,23 @@ class Partners(models.Model):
         return self.title
 
 
+class News(models.Model):
+    title = models.CharField(max_length=255, verbose_name='Title')
+    description = models.TextField(verbose_name='Description')
+    image = models.ImageField(verbose_name='Image', upload_to='AboutServices/')
+    active = models.BooleanField(verbose_name='Active', default=True)
+    created = models.DateField(verbose_name='Date public', auto_now_add=True, blank=True, null=True)
+    # slug = models.SlugField(verbose_name='URL', default='category-', unique=True, db_index=True)
+
+    class Meta:
+        verbose_name = 'News'
+        verbose_name_plural = 'News'
+        ordering = ['id']
+
+    def __str__(self):
+        return self.title
+
+
 class PhoneNumbers(models.Model):
     phonenumber = models.PositiveIntegerField(verbose_name="Phone number")
     active = models.BooleanField(verbose_name='Active', default=True)
