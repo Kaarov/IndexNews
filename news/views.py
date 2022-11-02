@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from rest_framework.permissions import BasePermission, AllowAny, SAFE_METHODS
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -70,7 +70,7 @@ class AboutServiceViewSet(ModelViewSet):
 # ---------
 
 
-# SLogan
+# SLogan / Slogan Items
 class SloganViewSet(ModelViewSet):
     serializer_class = SloganSerializer
     queryset = Slogan.objects.all()
@@ -115,6 +115,60 @@ class SloganViewSet(ModelViewSet):
         check = Slogan.objects.filter(pk=kwargs.get('id'))
         if check:
             instance = Slogan.objects.get(pk=kwargs.get('id'))
+            self.perform_destroy(instance)
+        else:
+            return Response("error: Not found", status=200)
+        return Response("success: Destroyed", status=200)
+
+
+# ---------
+
+
+# AboutUs / About Us Items
+class AboutUsViewSet(ModelViewSet):
+    serializer_class = AboutUsSerializer
+    queryset = AboutUs.objects.all()
+    permission_classes = [ReadOnly]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [AllowAny | ReadOnly]
+        elif self.action in ['list', 'retrieve', 'create', 'update']:
+            self.permission_classes = [ReadOnly]
+        else:
+            self.permission_classes = [ReadOnly]
+        return super(AboutUsViewSet, self).get_permissions()
+
+    def list(self, request, *args, **kwargs):
+        queryset = AboutUs.objects.all()
+        serializer = AboutUsSerializer(queryset, many=True)
+        return Response(serializer.data, status=200)
+
+    def retrieve(self, request, *args, **kwargs):
+        check = AboutUs.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = AboutUs.objects.get(pk=kwargs.get('id'))
+            serializer = AboutUsSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+        else:
+            return Response("error: Not found", status=200)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        check = AboutUs.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = AboutUs.objects.get(pk=kwargs.get('id'))
+            serializer = AboutUsSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:
+            return Response("error: Not found", status=200)
+        return Response(serializer.data, status=200)
+
+    def destroy(self, request, *args, **kwargs):
+        check = AboutUs.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = AboutUs.objects.get(pk=kwargs.get('id'))
             self.perform_destroy(instance)
         else:
             return Response("error: Not found", status=200)
@@ -234,15 +288,15 @@ class NewsViewSet(ModelViewSet):
 # class AboutServiceViewSet(ModelViewSet):
 #     serializer_class = Serial
 #     queryset = Model.objects.all()
-#     permission_classes = [AllowAny & ReadOnly]
+#     permission_classes = [ReadOnly]
 #
 #     def get_permissions(self):
 #         if self.action in ['list', 'retrieve']:
 #             self.permission_classes = [AllowAny | ReadOnly]
 #         elif self.action in ['list', 'retrieve', 'create', 'update']:
-#             self.permission_classes = [AllowAny & ReadOnly]
+#             self.permission_classes = [ReadOnly]
 #         else:
-#             self.permission_classes = [AllowAny & ReadOnly]
+#             self.permission_classes = [ReadOnly]
 #         return super(View, self).get_permissions()
 #
 #     def list(self, request, *args, **kwargs):

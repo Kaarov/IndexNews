@@ -13,7 +13,7 @@ class AboutServiceSerializer(serializers.ModelSerializer):
 
 
 # ----------
-# Slogan
+# Slogan / Slogan Items
 
 class SloganItemsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,6 +31,27 @@ class SloganSerializer(serializers.ModelSerializer):
     def get_slogan_items(self, obj):
         slogan_items = SloganItems.objects.filter(slogan=obj)
         return SloganItemsSerializer(slogan_items, many=True).data
+
+
+# ----------
+# AboutUs / About Us Items
+
+class AboutUsItemsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AboutUsItems
+        fields = '__all__'
+
+
+class AboutUsSerializer(serializers.ModelSerializer):
+    about_us_items = serializers.SerializerMethodField('get_about_us_items')
+
+    class Meta:
+        model = AboutUs
+        fields = ['id', 'title', 'description', 'image', 'active', 'created', 'about_us_items']
+
+    def get_about_us_items(self, obj):
+        about_us_items = AboutUsItems.objects.filter(about_us=obj)
+        return AboutUsItemsSerializer(about_us_items, many=True).data
 
 
 # ----------

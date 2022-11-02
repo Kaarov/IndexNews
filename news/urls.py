@@ -17,6 +17,12 @@ urlpatterns = [
                                                     'put': 'update', 'delete': 'destroy'})),
 
 
+    # AboutUs API
+    path('aboutus/', AboutUsViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('aboutus/<int:id>/', AboutUsViewSet.as_view({'get': 'list', 'patch': 'retrieve',
+                                                      'put': 'update', 'delete': 'destroy'})),
+
+
     # Features API
     path('features/', FeaturesViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('features/<int:id>/', FeaturesViewSet.as_view({'get': 'list', 'patch': 'retrieve',
