@@ -23,6 +23,12 @@ urlpatterns = [
                                                       'put': 'update', 'delete': 'destroy'})),
 
 
+    # Services API
+    path('services/', ServicesViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('services/<int:id>/', ServicesViewSet.as_view({'get': 'list', 'patch': 'retrieve',
+                                                        'put': 'update', 'delete': 'destroy'})),
+
+
     # Features API
     path('features/', FeaturesViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('features/<int:id>/', FeaturesViewSet.as_view({'get': 'list', 'patch': 'retrieve',

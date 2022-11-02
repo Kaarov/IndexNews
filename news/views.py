@@ -20,15 +20,15 @@ class ReadOnly(BasePermission):
 class AboutServiceViewSet(ModelViewSet):
     serializer_class = AboutServiceSerializer
     queryset = AboutService.objects.all()
-    permission_classes = [AllowAny & ReadOnly]
+    permission_classes = [ReadOnly]
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny | ReadOnly]
         elif self.action in ['list', 'retrieve', 'create', 'update']:
-            self.permission_classes = [AllowAny & ReadOnly]
+            self.permission_classes = [ReadOnly]
         else:
-            self.permission_classes = [AllowAny & ReadOnly]
+            self.permission_classes = [ReadOnly]
         return super(AboutServiceViewSet, self).get_permissions()
 
     def list(self, request, *args, **kwargs):
@@ -74,7 +74,7 @@ class AboutServiceViewSet(ModelViewSet):
 class SloganViewSet(ModelViewSet):
     serializer_class = SloganSerializer
     queryset = Slogan.objects.all()
-    permission_classes = [AllowAny & ReadOnly]
+    permission_classes = [ReadOnly]
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -177,19 +177,73 @@ class AboutUsViewSet(ModelViewSet):
 
 # ---------
 
-# Features
-class FeaturesViewSet(ModelViewSet):
-    serializer_class = FeaturesSerializer
-    queryset = Features.objects.all()
-    permission_classes = [AllowAny & ReadOnly]
+
+# Services / Services Items
+class ServicesViewSet(ModelViewSet):
+    serializer_class = ServicesSerializer
+    queryset = Services.objects.all()
+    permission_classes = [ReadOnly]
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny | ReadOnly]
         elif self.action in ['list', 'retrieve', 'create', 'update']:
-            self.permission_classes = [AllowAny & ReadOnly]
+            self.permission_classes = [ReadOnly]
         else:
-            self.permission_classes = [AllowAny & ReadOnly]
+            self.permission_classes = [ReadOnly]
+        return super(ServicesViewSet, self).get_permissions()
+
+    def list(self, request, *args, **kwargs):
+        queryset = Services.objects.all()
+        serializer = ServicesSerializer(queryset, many=True)
+        return Response(serializer.data, status=200)
+
+    def retrieve(self, request, *args, **kwargs):
+        check = Services.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Services.objects.get(pk=kwargs.get('id'))
+            serializer = ServicesSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+        else:
+            return Response("error: Not found", status=200)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        check = Services.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Services.objects.get(pk=kwargs.get('id'))
+            serializer = ServicesSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:
+            return Response("error: Not found", status=200)
+        return Response(serializer.data, status=200)
+
+    def destroy(self, request, *args, **kwargs):
+        check = Services.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Services.objects.get(pk=kwargs.get('id'))
+            self.perform_destroy(instance)
+        else:
+            return Response("error: Not found", status=200)
+        return Response("success: Destroyed", status=200)
+
+
+# ---------
+
+# Features
+class FeaturesViewSet(ModelViewSet):
+    serializer_class = FeaturesSerializer
+    queryset = Features.objects.all()
+    permission_classes = [ReadOnly]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [AllowAny | ReadOnly]
+        elif self.action in ['list', 'retrieve', 'create', 'update']:
+            self.permission_classes = [ReadOnly]
+        else:
+            self.permission_classes = [ReadOnly]
         return super(FeaturesViewSet, self).get_permissions()
 
     def list(self, request, *args, **kwargs):
@@ -234,15 +288,15 @@ class FeaturesViewSet(ModelViewSet):
 class NewsViewSet(ModelViewSet):
     serializer_class = NewsSerializer
     queryset = News.objects.all()
-    permission_classes = [AllowAny & ReadOnly]
+    permission_classes = [ReadOnly]
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny | ReadOnly]
         elif self.action in ['list', 'retrieve', 'create', 'update']:
-            self.permission_classes = [AllowAny & ReadOnly]
+            self.permission_classes = [ReadOnly]
         else:
-            self.permission_classes = [AllowAny & ReadOnly]
+            self.permission_classes = [ReadOnly]
         return super(NewsViewSet, self).get_permissions()
 
     def list(self, request, *args, **kwargs):

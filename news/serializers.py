@@ -55,6 +55,27 @@ class AboutUsSerializer(serializers.ModelSerializer):
 
 
 # ----------
+# Services / Services Items
+
+class ServicesItemsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServicesItems
+        fields = '__all__'
+
+
+class ServicesSerializer(serializers.ModelSerializer):
+    services_items = serializers.SerializerMethodField('get_services_items')
+
+    class Meta:
+        model = Services
+        fields = ['id', 'title', 'image', 'active', 'created', 'services_items']
+
+    def get_services_items(self, obj):
+        services_items = ServicesItems.objects.filter(services=obj)
+        return ServicesItemsSerializer(services_items, many=True).data
+
+
+# ----------
 # Features
 
 class FeaturesSerializer(serializers.ModelSerializer):
@@ -64,7 +85,7 @@ class FeaturesSerializer(serializers.ModelSerializer):
 
 
 # ----------
-# Features
+# News
 
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
