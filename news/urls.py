@@ -47,4 +47,10 @@ urlpatterns = [
                                                        'put': 'update', 'delete': 'destroy'})),
 
 
+    # Contacts API
+    path('contacts/', ContactsViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('contacts/<int:id>/', ContactsViewSet.as_view({'get': 'list', 'patch': 'retrieve',
+                                                       'put': 'update', 'delete': 'destroy'})),
+
+
 ]

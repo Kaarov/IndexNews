@@ -390,6 +390,59 @@ class NewsViewSet(ModelViewSet):
 
 # ---------
 
+# Contacts
+class ContactsViewSet(ModelViewSet):
+    serializer_class = ContactsSerializer
+    queryset = Contacts.objects.all()
+    permission_classes = [ReadOnly]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [AllowAny | ReadOnly]
+        elif self.action in ['list', 'retrieve', 'create', 'update']:
+            self.permission_classes = [ReadOnly]
+        else:
+            self.permission_classes = [ReadOnly]
+        return super(ContactsViewSet, self).get_permissions()
+
+    def list(self, request, *args, **kwargs):
+        queryset = Contacts.objects.all()
+        serializer = ContactsSerializer(queryset, many=True)
+        return Response(serializer.data, status=200)
+
+    def retrieve(self, request, *args, **kwargs):
+        check = Contacts.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Contacts.objects.get(pk=kwargs.get('id'))
+            serializer = ContactsSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+        else:
+            return Response("error: Not found", status=200)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        check = Contacts.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Contacts.objects.get(pk=kwargs.get('id'))
+            serializer = ContactsSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:
+            return Response("error: Not found", status=200)
+        return Response(serializer.data, status=200)
+
+    def destroy(self, request, *args, **kwargs):
+        check = Contacts.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Contacts.objects.get(pk=kwargs.get('id'))
+            self.perform_destroy(instance)
+        else:
+            return Response("error: Not found", status=200)
+        return Response("success: Destroyed", status=200)
+
+
+# ---------
+
 # AboutService
 
 # class AboutServiceViewSet(ModelViewSet):

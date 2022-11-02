@@ -101,4 +101,13 @@ class NewsSerializer(serializers.ModelSerializer):
         model = News
         fields = '__all__'
 
+
+# ----------
+# Contacts
+
+class ContactsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contacts
+        fields = '__all__'
+
 # ----------
