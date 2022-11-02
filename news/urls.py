@@ -29,7 +29,7 @@ urlpatterns = [
                                                                'put': 'update', 'delete': 'destroy'})),
 
 
-    # Features API
+    # News API
     path('news/', NewsViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('news/<int:id>/', NewsViewSet.as_view({'get': 'list', 'patch': 'retrieve',
                                                        'put': 'update', 'delete': 'destroy'})),
