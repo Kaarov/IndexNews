@@ -69,6 +69,60 @@ class AboutServiceViewSet(ModelViewSet):
 
 # ---------
 
+
+# SLogan
+class SloganViewSet(ModelViewSet):
+    serializer_class = SloganSerializer
+    queryset = Slogan.objects.all()
+    permission_classes = [AllowAny & ReadOnly]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [AllowAny | ReadOnly]
+        elif self.action in ['list', 'retrieve', 'create', 'update']:
+            self.permission_classes = [ReadOnly]
+        else:
+            self.permission_classes = [ReadOnly]
+        return super(SloganViewSet, self).get_permissions()
+
+    def list(self, request, *args, **kwargs):
+        queryset = Slogan.objects.all()
+        serializer = SloganSerializer(queryset, many=True)
+        return Response(serializer.data, status=200)
+
+    def retrieve(self, request, *args, **kwargs):
+        check = Slogan.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Slogan.objects.get(pk=kwargs.get('id'))
+            serializer = SloganSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+        else:
+            return Response("error: Not found", status=200)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        check = Slogan.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Slogan.objects.get(pk=kwargs.get('id'))
+            serializer = SloganSerializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:
+            return Response("error: Not found", status=200)
+        return Response(serializer.data, status=200)
+
+    def destroy(self, request, *args, **kwargs):
+        check = Slogan.objects.filter(pk=kwargs.get('id'))
+        if check:
+            instance = Slogan.objects.get(pk=kwargs.get('id'))
+            self.perform_destroy(instance)
+        else:
+            return Response("error: Not found", status=200)
+        return Response("success: Destroyed", status=200)
+
+
+# ---------
+
 # Features
 class FeaturesViewSet(ModelViewSet):
     serializer_class = FeaturesSerializer
@@ -122,7 +176,7 @@ class FeaturesViewSet(ModelViewSet):
 
 # ---------
 
-# AboutService
+# News
 class NewsViewSet(ModelViewSet):
     serializer_class = NewsSerializer
     queryset = News.objects.all()

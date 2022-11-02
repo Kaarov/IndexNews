@@ -28,8 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     url('chaining/', include('smart_selects.urls')),
-    path('user/', include('user.urls')),
-    path('news/', include('news.urls')),
+    path('', include('news.urls')),
     # path('swagger/', schema_view),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
