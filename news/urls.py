@@ -35,6 +35,12 @@ urlpatterns = [
                                                                'put': 'update', 'delete': 'destroy'})),
 
 
+    # Partners API
+    path('partners/', PartnersViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('partners/<int:id>/', PartnersViewSet.as_view({'get': 'list', 'patch': 'retrieve',
+                                                               'put': 'update', 'delete': 'destroy'})),
+
+
     # News API
     path('news/', NewsViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('news/<int:id>/', NewsViewSet.as_view({'get': 'list', 'patch': 'retrieve',

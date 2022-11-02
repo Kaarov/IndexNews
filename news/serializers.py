@@ -85,6 +85,15 @@ class FeaturesSerializer(serializers.ModelSerializer):
 
 
 # ----------
+# Partners
+
+class PartnersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partners
+        fields = '__all__'
+
+
+# ----------
 # News
 
 class NewsSerializer(serializers.ModelSerializer):
